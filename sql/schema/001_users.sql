@@ -27,7 +27,23 @@ CREATE TABLE feed_follows (
     UNIQUE (user_id, feed_id)
 );
 
+ALTER TABLE feeds ADD last_fetched_at TIMESTAMP;
+
+CREATE TABLE posts (
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    title TEXT NOT NULL,
+    url TEXT NOT NULL UNIQUE,
+    description TEXT,
+    published_at TIMESTAMP NOT NULL,
+    feed_id UUID NOT NULL,
+    FOREIGN KEY (feed_id) REFERENCES feeds (id) ON DELETE CASCADE
+);
+
 -- +goose Down
-DROP TABLE users;
-DROP TABLE feeds;
 DROP TABLE feed_follows;
+DROP TABLE posts;
+DROP TABLE feeds;
+DROP TABLE users;
+
